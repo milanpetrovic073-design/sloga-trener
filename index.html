@@ -15581,7 +15581,7 @@ function installHelpV145(text){
   var m=document.getElementById('installHelpV145');
   if(!m){
     m=document.createElement('div'); m.id='installHelpV145';
-    m.style.cssText='position:fixed;inset:0;background:rgba(0,0,0,.78);z-index:900;display:flex;align-items:center;justify-content:center;padding:20px;';
+    m.style.cssText='position:fixed;inset:0;background:rgba(0,0,0,.78);z-index:100000;display:flex;align-items:center;justify-content:center;padding:20px;';
     m.onclick=function(e){ if(e.target===m) m.remove(); };
     document.body.appendChild(m);
   }
@@ -15592,22 +15592,31 @@ function installHelpV145(text){
 }
 
 function installAppV145(){
-  if(isStandaloneV145()){ toast('Aplikacija je već instalirana.'); return; }
+  if(isStandaloneV145()){ installHelpV145('Aplikacija je već instalirana i otvorena kao aplikacija. ✓'); return; }
   if(location.protocol==='file:'){
-    installHelpV145('Instalacija ne radi iz datoteke na mobitelu.<br>Postavi fileove na HTTPS adresu (npr. Netlify), otvori tu adresu u pregledniku mobitela i tada ponovno pritisni <b>Instaliraj</b>.');
+    installHelpV145('Instalacija ne radi iz datoteke na mobitelu.<br>Postavi fileove na HTTPS adresu (npr. GitHub Pages), otvori tu adresu u pregledniku mobitela i tada ponovno pritisni <b>Instaliraj</b>.');
+    return;
+  }
+  var ua=navigator.userAgent||'';
+  var isAndroid=/Android/i.test(ua), isIOS=/iPhone|iPad|iPod/i.test(ua);
+  // In-app preglednici (WhatsApp, Facebook, Instagram, Viber, GitHub...) ne mogu instalirati aplikaciju
+  var inApp=/FBAN|FBAV|Instagram|Line\/|Viber|WhatsApp|GitHub|; wv\)|Version\/[\d.]+ Chrome\/[\d.]+ Mobile/i.test(ua) && isAndroid;
+  if(inApp){
+    installHelpV145('Ova stranica je otvorena u <b>ugrađenom pregledniku</b> druge aplikacije, a u njemu instalacija nije moguća.<br><br>Tapni <b>⋮</b> → <b>„Otvori u Chromeu“</b> (ili kopiraj adresu u Chrome), pa tamo ponovno pritisni <b>Instaliraj</b>.');
     return;
   }
   var ev=window._installEvtV145||window._deferredPrompt;
   if(ev){
-    ev.prompt();
-    ev.userChoice.then(function(r){ window._installEvtV145=null; window._deferredPrompt=null; if(r&&r.outcome==='accepted') toast('✓ Instalirano!'); });
-    return;
+    try{
+      ev.prompt();
+      if(ev.userChoice) ev.userChoice.then(function(r){ window._installEvtV145=null; window._deferredPrompt=null; if(r&&r.outcome==='accepted') installHelpV145('✓ Instalirano! Ikonu NK SLOGA nađi na početnom zaslonu.'); });
+      return;
+    }catch(e){ /* nastavi na ručne upute */ }
   }
-  var ua=navigator.userAgent||'';
-  if(/iPhone|iPad|iPod/i.test(ua)){
+  if(isIOS){
     installHelpV145('Otvori ovu stranicu u <b>Safariju</b>, pa:<br>1. Tapni <b>Dijeli</b> ⬆ (donja traka)<br>2. Odaberi <b>„Dodaj na početni zaslon“</b><br>3. Tapni <b>Dodaj</b>');
-  } else if(/Android/i.test(ua)){
-    installHelpV145('Otvori stranicu u <b>Chromeu</b>, pa:<br>1. Tapni <b>⋮</b> (gore desno)<br>2. Odaberi <b>„Instaliraj aplikaciju“</b> ili <b>„Dodaj na početni zaslon“</b>');
+  } else if(isAndroid){
+    installHelpV145('Chrome trenutno ne nudi automatsku instalaciju, ali možeš ručno:<br>1. Tapni <b>⋮</b> (gore desno u Chromeu)<br>2. Odaberi <b>„Instaliraj aplikaciju“</b> ili <b>„Dodaj na početni zaslon“</b><br>3. Potvrdi <b>Instaliraj</b><br><br><span style="font-size:11px;color:#94a3b8;">Ako te opcije nema: zatvori Chrome potpuno, otvori adresu ponovno i pričekaj 10–20 sekundi.</span>');
   } else {
     installHelpV145('U Chromeu/Edgeu klikni ikonu <b>instalacije</b> u adresnoj traci (desno), ili izbornik ⋮ → <b>Instaliraj</b>.');
   }
