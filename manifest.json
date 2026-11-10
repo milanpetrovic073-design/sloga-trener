@@ -1,6 +1,6 @@
 {
-  "name": "NK SLOGA Trener",
-  "short_name": "Sloga Trener",
+  "name": "Trener Evidencija",
+  "short_name": "Trener",
   "description": "Evidencija igrača i treninga — radi offline, podaci na mobitelu",
   "start_url": "./index.html",
   "scope": "./",
