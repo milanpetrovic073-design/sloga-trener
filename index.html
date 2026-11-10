@@ -58,6 +58,8 @@ if (!window.LOCAL_ONLY_MODE) {
 <style>
 body.local-only .needs-server{display:none!important}
 body.local-only #clubScheduleShortcut{display:none!important}
+.local-only-show{display:none}
+body.local-only .local-only-show{display:block}
 @import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap');
 
 :root {
@@ -1033,7 +1035,7 @@ body{font-family:DM Sans,sans-serif;background:var(--navy);color:var(--text);
       <div class="login-logo-badge"><img src="data:image/jpeg;base64,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" style="width:100%;height:100%;object-fit:cover;" alt="NS"></div>
       <div class="login-title brand-name-v152">TRENER EVIDENCIJA</div>
       <div class="login-sub">Trener aplikacija</div>
-      <div style="font-size:10px;color:#64748b;margin-top:3px;">verzija 158 · lokalni način</div>
+      <div style="font-size:10px;color:#64748b;margin-top:3px;">verzija 159 · lokalni način</div>
     </div>
 
     <!-- Korak 1: Login forma -->
@@ -1847,6 +1849,22 @@ body{font-family:DM Sans,sans-serif;background:var(--navy);color:var(--text);
 
     <!-- TAB: Evidencija -->
     <div id="stabContent-presence" style="display:none;">
+
+      <!-- v159: poziv na trening preko WhatsAppa + odgovori -->
+      <div class="local-only-show" id="rsvpCardV159" style="background:linear-gradient(160deg,rgba(7,87,170,.18),rgba(37,211,102,.08));border:1px solid rgba(96,165,250,.28);border-radius:14px;padding:13px;margin-bottom:12px;">
+        <div style="font-size:14px;font-weight:800;color:var(--text);margin-bottom:2px;">📲 Poziv na trening</div>
+        <div style="font-size:11px;color:var(--text2);margin-bottom:10px;">Igrači jednim dodirom odgovore na WhatsAppu, a ti zalijepiš odgovore u aplikaciju.</div>
+        <div style="display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;margin-bottom:8px;">
+          <div><label class="form-label" style="font-size:10px;">Datum</label><input type="date" class="form-input" id="rsvpDateV159" onchange="rsvpRenderSummaryV159()" style="width:100%;font-size:13px;padding:8px 10px;"></div>
+          <div><label class="form-label" style="font-size:10px;">Vrijeme</label><input type="time" class="form-input" id="rsvpTimeV159" value="17:00" style="width:100%;font-size:13px;padding:8px 10px;"></div>
+          <div style="grid-column:1/-1;"><label class="form-label" style="font-size:10px;">Mjesto (opcionalno)</label><input type="text" class="form-input" id="rsvpPlaceV159" maxlength="80" placeholder="npr. Igralište Sloga" style="width:100%;font-size:13px;padding:8px 10px;"></div>
+        </div>
+        <div style="display:flex;gap:8px;">
+          <button type="button" class="btn btn-sm" onclick="rsvpSendInviteV159()" style="flex:1;background:#25d366;color:#fff;border:none;font-weight:700;padding:11px;">📤 Pošalji poziv u grupu</button>
+          <button type="button" class="btn btn-sm" onclick="rsvpOpenPasteV159()" style="flex:1;background:#0757aa;color:#fff;border:none;font-weight:700;padding:11px;">📥 Zalijepi odgovore</button>
+        </div>
+        <div id="rsvpSummaryV159" style="margin-top:10px;"></div>
+      </div>
 
       <!-- Slanje potvrde dolaska — v128 branded -->
       <div class="training-share-v128 needs-server">
@@ -2906,6 +2924,8 @@ body{font-family:DM Sans,sans-serif;background:var(--navy);color:var(--text);
   <div style="background:#0f1f3d;border:1px solid rgba(255,255,255,.15);border-radius:18px;padding:18px;width:100%;max-width:400px;">
     <div style="font-size:16px;font-weight:600;color:#e8edf5;margin-bottom:4px;">🏷 Naziv i grb kluba</div>
     <div style="font-size:11px;color:#94a3b8;margin-bottom:14px;">Vrijedi samo na ovom mobitelu. Prikazuje se u zaglavlju i u porukama.</div>
+    <label style="font-size:11px;color:#94a3b8;">Tvoj broj mobitela (za odgovore igrača na WhatsAppu)</label>
+    <input id="brandPhoneInV152" type="tel" maxlength="20" placeholder="npr. 091 234 5678" style="width:100%;box-sizing:border-box;padding:11px;border-radius:9px;border:1px solid var(--border);background:var(--card2);color:var(--text);font-size:14px;margin:4px 0 14px;">
     <label style="font-size:11px;color:#94a3b8;">Naziv kluba</label>
     <input id="brandNameInV152" maxlength="40" placeholder="TRENER EVIDENCIJA" style="width:100%;box-sizing:border-box;padding:11px;border-radius:9px;border:1px solid var(--border);background:var(--card2);color:var(--text);font-size:14px;margin:4px 0 14px;">
     <div style="display:flex;align-items:center;gap:14px;margin-bottom:14px;">
@@ -15743,7 +15763,8 @@ function exportJSON() {
     schedule:    DB.schedule || [],
     users:       (typeof AUTH!=='undefined' && AUTH.users) ? AUTH.users : [],
     playerTests: DB.playerTests || [],
-    brand: brandGetV152()
+    brand: brandGetV152(),
+    rsvp: rsvpAllV159()
   };
 
   var json     = JSON.stringify(backup, null, 2);
@@ -15794,6 +15815,209 @@ function saveAccountV154(){
   haptic('success'); toast('Spremljeno. Korisničko ime: '+uname);
 }
 
+
+// ════════════ v159: poziv na trening + odgovori preko WhatsAppa ════════════
+var RSVP_KEY_V159='nksloga_v2_rsvp';
+function rsvpAllV159(){ try{ return JSON.parse(localStorage.getItem(RSVP_KEY_V159)||'{}')||{}; }catch(e){ return {}; } }
+function rsvpGetV159(selId,date){ return rsvpAllV159()[selId+'|'+date]||{}; }
+function rsvpSetV159(selId,date,map){
+  var a=rsvpAllV159(); a[selId+'|'+date]=map;
+  try{ localStorage.setItem(RSVP_KEY_V159,JSON.stringify(a)); }catch(e){ toast('Spremanje nije uspjelo.','error'); }
+}
+function rsvpPhoneV159(){
+  var d=String(brandGetV152().phone||'').replace(/[^0-9+]/g,'').replace(/^\+/,'');
+  if(d.indexOf('00')===0) d=d.slice(2);
+  else if(d.charAt(0)==='0') d='385'+d.slice(1);
+  return d.length>=9 ? d : '';
+}
+function rsvpDateLabelV159(date){
+  var d=new Date(date+'T12:00:00'); if(isNaN(d.getTime())) return {long:date,short:date};
+  var days=['nedjelja','ponedjeljak','utorak','srijeda','četvrtak','petak','subota'], p=function(n){return String(n).padStart(2,'0');};
+  return {long:days[d.getDay()]+', '+p(d.getDate())+'.'+p(d.getMonth()+1)+'.'+d.getFullYear()+'.', short:p(d.getDate())+'.'+p(d.getMonth()+1)+'.'};
+}
+function rsvpDateV159(){
+  var el=document.getElementById('rsvpDateV159'); if(!el) return '';
+  if(!el.value) el.value=localDateStr();
+  return el.value;
+}
+function rsvpPlayersV159(){
+  return (playersForSel(currentSelId)||[]).filter(function(p){return p.active!==false;});
+}
+function rsvpLinksV159(date){
+  var ph=rsvpPhoneV159(), dl=rsvpDateLabelV159(date).short;
+  var mk=function(t){ return 'https://wa.me/'+ph+'?text='+encodeURIComponent(t); };
+  return {
+    yes: mk('✅ DOLAZIM (trening '+dl+') – ime i prezime: '),
+    no:  mk('❌ NE DOLAZIM (trening '+dl+') – ime i prezime: ')
+  };
+}
+function rsvpShareTextV159(msg){
+  if(navigator.share){ navigator.share({text:msg}).catch(function(){}); }
+  else { try{ shareTextViaWhatsAppV144(msg); }catch(e){ fallbackCopy(msg); toast('Poruka je kopirana. Zalijepi je u grupu.'); } }
+}
+function rsvpEnsurePhoneV159(){
+  if(rsvpPhoneV159()) return true;
+  toast('Prvo upiši svoj broj mobitela.','error');
+  openBrandV152();
+  return false;
+}
+function rsvpSendInviteV159(){
+  if(!currentSelId){ toast('Odaberi selekciju.','error'); return; }
+  if(!rsvpEnsurePhoneV159()) return;
+  var date=rsvpDateV159(), time=(document.getElementById('rsvpTimeV159').value||'').trim(), place=(document.getElementById('rsvpPlaceV159').value||'').trim();
+  var sel=(DB.selections||[]).find(function(x){return String(x.id)===String(currentSelId);});
+  var dl=rsvpDateLabelV159(date), L=rsvpLinksV159(date), lines=[];
+  lines.push('⚽ *POZIV NA TRENING*','');
+  if(sel&&sel.name) lines.push('👥 *Selekcija:* '+sel.name);
+  lines.push('📅 *Datum:* '+dl.long);
+  if(time) lines.push('🕐 *Vrijeme:* '+time+' h');
+  if(place) lines.push('📍 *Mjesto:* '+place);
+  lines.push('','*Javi dolazak jednim dodirom* (otvara se poruka meni, samo upiši ime i prezime i pošalji):','','✅ Dolazim:',L.yes,'','❌ Ne dolazim:',L.no,'','🔵⚪ *'+brandName()+'*');
+  rsvpShareTextV159(lines.join('\n'));
+  haptic('success');
+}
+
+// ---- Zalijepi odgovore
+function rsvpNormV159(x){ return importNormV152(x); }
+function rsvpStatusV159(raw){
+  var low=rsvpNormV159(raw);
+  if(raw.indexOf('❌')>=0 || /\bne\s+dolaz|\bne\s+mogu|\bne\s+cu\s+doci|\bnecu\s+doci|\bizostaj|\bne\s+ide|\bbolestan|\bpovrijed|\bnisam\s+u\s+mogucnosti/.test(low)) return 'no';
+  if(raw.indexOf('✅')>=0 || /\bdolazim|\bdolazi\b|\bdolazimo|\bdoci cu|\bdolazit cu|\bbit cu|\bide\b/.test(low)) return 'yes';
+  return null;
+}
+function rsvpMatchPlayerV159(raw,players){
+  var after=raw.split(/ime i prezime\s*:/i); var text=after.length>1?after[after.length-1]:raw;
+  var toks=rsvpNormV159(text).split(' ').filter(Boolean), set={}; toks.forEach(function(t){set[t]=1;});
+  var best=null, bestScore=0, tie=false;
+  players.forEach(function(p){
+    var pt=rsvpNormV159(p.name).split(' ').filter(Boolean); if(!pt.length) return;
+    var sc=pt.filter(function(t){return set[t];}).length;
+    if(pt.length===1 && sc===1) sc=1; else if(sc<2 && pt.length>1) sc=sc; 
+    if(sc>bestScore){ best=p; bestScore=sc; tie=false; } else if(sc===bestScore && sc>0){ tie=true; }
+  });
+  if(!best) return null;
+  var need=Math.min(2,rsvpNormV159(best.name).split(' ').filter(Boolean).length);
+  if(bestScore<need || tie) return null;
+  return best;
+}
+function rsvpParseV159(text,players){
+  var map={}, unknown=[];
+  String(text||'').split(/\r?\n/).forEach(function(line){
+    line=line.trim(); if(!line) return;
+    var st=rsvpStatusV159(line); if(!st) return;
+    var pl=rsvpMatchPlayerV159(line,players);
+    if(pl) map[pl.id]=st; else unknown.push({line:line,status:st});
+  });
+  return {map:map,unknown:unknown};
+}
+function rsvpClosePasteV159(){ var m=document.getElementById('rsvpPasteV159'); if(m) m.remove(); }
+function rsvpOpenPasteV159(){
+  if(!currentSelId){ toast('Odaberi selekciju.','error'); return; }
+  rsvpClosePasteV159();
+  var m=document.createElement('div'); m.id='rsvpPasteV159';
+  m.style.cssText='position:fixed;inset:0;z-index:10070;background:rgba(2,6,23,.82);display:flex;align-items:flex-end;justify-content:center;';
+  m.innerHTML='<div style="width:100%;max-width:520px;max-height:92vh;overflow-y:auto;background:#0f1f3d;border:1px solid rgba(255,255,255,.15);border-radius:18px 18px 0 0;padding:16px;">'+
+    '<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;"><div style="font-size:16px;font-weight:700;color:#e8edf5;">📥 Zalijepi odgovore</div><button onclick="rsvpClosePasteV159()" style="background:none;border:none;color:#94a3b8;font-size:20px;">✕</button></div>'+
+    '<div style="font-size:11px;color:#94a3b8;margin-bottom:8px;">Kopiraj poruke igrača iz WhatsAppa (označi poruke → kopiraj) i zalijepi ovdje. Aplikacija prepozna ime i „dolazim / ne dolazim“.</div>'+
+    '<textarea id="rsvpTextV159" style="width:100%;box-sizing:border-box;height:140px;background:#1a2235;border:1px solid rgba(255,255,255,.12);border-radius:8px;padding:10px;color:#e8edf5;font-size:13px;" placeholder="✅ DOLAZIM (trening 12.11.) – ime i prezime: Ivo Ivić&#10;❌ NE DOLAZIM (trening 12.11.) – ime i prezime: Marko Marić"></textarea>'+
+    '<button onclick="rsvpAnalyzeV159()" class="btn btn-primary btn-full" style="margin:10px 0;">🔍 Prepoznaj odgovore</button>'+
+    '<div id="rsvpPreviewV159"></div></div>';
+  m.addEventListener('click',function(e){ if(e.target===m) rsvpClosePasteV159(); });
+  document.body.appendChild(m);
+}
+var _rsvpParsedV159=null;
+function rsvpAnalyzeV159(){
+  var players=rsvpPlayersV159(), date=rsvpDateV159();
+  var res=rsvpParseV159(document.getElementById('rsvpTextV159').value,players);
+  var prev=rsvpGetV159(currentSelId,date), map={}; Object.keys(prev).forEach(function(k){map[k]=prev[k];});
+  Object.keys(res.map).forEach(function(k){map[k]=res.map[k];});
+  _rsvpParsedV159={map:map,unknown:res.unknown,players:players};
+  rsvpRenderPreviewV159();
+}
+function rsvpRenderPreviewV159(){
+  var d=_rsvpParsedV159, el=document.getElementById('rsvpPreviewV159'); if(!d||!el) return;
+  var nameOf={}; d.players.forEach(function(p){nameOf[p.id]=p.name;});
+  var sel=function(pid,v){ return '<select onchange="rsvpSetStatusV159(\''+pid+'\',this.value)" style="background:#1a2235;color:#e8edf5;border:1px solid rgba(255,255,255,.15);border-radius:6px;padding:4px;font-size:12px;"><option value=""'+(v?'':' selected')+'>–</option><option value="yes"'+(v==='yes'?' selected':'')+'>✅ Dolazi</option><option value="no"'+(v==='no'?' selected':'')+'>❌ Ne dolazi</option></select>'; };
+  var rows=d.players.map(function(p){
+    return '<div style="display:flex;justify-content:space-between;align-items:center;padding:6px 0;border-top:1px solid rgba(255,255,255,.07);"><span style="font-size:13px;color:#e8edf5;">'+escHtml(p.name)+'</span>'+sel(p.id,d.map[p.id])+'</div>';
+  }).join('');
+  var unk='';
+  if(d.unknown.length){
+    var opts='<option value="">– odaberi igrača –</option>'+d.players.map(function(p){return '<option value="'+p.id+'">'+escHtml(p.name)+'</option>';}).join('');
+    unk='<div style="margin:10px 0 4px;font-size:12px;font-weight:700;color:#fbbf24;">⚠ Nisam prepoznao igrača ('+d.unknown.length+')</div>'+
+      d.unknown.map(function(u,i){ return '<div style="padding:6px 0;border-top:1px solid rgba(255,255,255,.07);"><div style="font-size:11px;color:#94a3b8;margin-bottom:4px;">'+(u.status==='yes'?'✅':'❌')+' '+escHtml(u.line)+'</div><select onchange="rsvpAssignUnknownV159('+i+',this.value)" style="width:100%;background:#1a2235;color:#e8edf5;border:1px solid rgba(255,255,255,.15);border-radius:6px;padding:6px;font-size:12px;">'+opts+'</select></div>'; }).join('');
+  }
+  var yes=0,no=0; d.players.forEach(function(p){ if(d.map[p.id]==='yes')yes++; else if(d.map[p.id]==='no')no++; });
+  el.innerHTML='<div style="font-size:12px;color:#94a3b8;margin-bottom:6px;">Dolazi: <b style="color:#10b981;">'+yes+'</b> · Ne dolazi: <b style="color:#f87171;">'+no+'</b> · Bez odgovora: <b>'+(d.players.length-yes-no)+'</b> (možeš ispraviti ispod)</div>'+unk+
+    '<div style="margin-top:8px;">'+rows+'</div>'+
+    '<button onclick="rsvpSaveV159()" class="btn btn-primary btn-full" style="margin-top:12px;background:#10b981;">✓ Spremi odgovore</button>';
+}
+function rsvpSetStatusV159(pid,v){ if(!_rsvpParsedV159) return; if(v) _rsvpParsedV159.map[pid]=v; else delete _rsvpParsedV159.map[pid]; }
+function rsvpAssignUnknownV159(i,pid){
+  var d=_rsvpParsedV159; if(!d||!pid) return;
+  d.map[pid]=d.unknown[i].status; d.unknown.splice(i,1); rsvpRenderPreviewV159();
+}
+function rsvpSaveV159(){
+  if(!_rsvpParsedV159) return;
+  rsvpSetV159(currentSelId,rsvpDateV159(),_rsvpParsedV159.map);
+  rsvpClosePasteV159(); rsvpRenderSummaryV159(); haptic('success'); toast('Odgovori spremljeni.');
+}
+
+// ---- Sažetak odgovora
+function rsvpRenderSummaryV159(){
+  var el=document.getElementById('rsvpSummaryV159'); if(!el||!currentSelId) return;
+  var date=rsvpDateV159(), map=rsvpGetV159(currentSelId,date), players=rsvpPlayersV159();
+  var yes=[],no=[],none=[];
+  players.forEach(function(p){ var v=map[p.id]; if(v==='yes')yes.push(p.name); else if(v==='no')no.push(p.name); else none.push(p.name); });
+  if(!yes.length && !no.length){ el.innerHTML=''; return; }
+  var blk=function(t,c,a){ return a.length?'<div style="margin-top:6px;font-size:12px;"><b style="color:'+c+';">'+t+' ('+a.length+'):</b> <span style="color:var(--text2);">'+a.map(escHtml).join(', ')+'</span></div>':''; };
+  el.innerHTML='<div style="background:var(--card);border:1px solid var(--border);border-radius:10px;padding:10px;">'+
+    '<div style="font-size:11px;font-weight:700;color:var(--text2);text-transform:uppercase;letter-spacing:.05em;">Odgovori za '+escHtml(rsvpDateLabelV159(date).short)+'</div>'+
+    blk('✅ Dolaze','#10b981',yes)+blk('❌ Ne dolaze','#f87171',no)+blk('⏳ Nisu odgovorili','#fbbf24',none)+
+    '<div style="display:flex;gap:6px;margin-top:10px;flex-wrap:wrap;">'+
+      (none.length?'<button type="button" class="btn btn-ghost btn-sm" style="flex:1;" onclick="rsvpRemindV159()">📣 Podsjeti ostale</button>':'')+
+      '<button type="button" class="btn btn-ghost btn-sm" style="flex:1;" onclick="rsvpShareListV159()">📤 Pošalji popis</button>'+
+      '<button type="button" class="btn btn-ghost btn-sm" style="flex:1;" onclick="rsvpApplyV159()">✓ Upiši u evidenciju</button>'+
+    '</div></div>';
+}
+function rsvpRemindV159(){
+  if(!rsvpEnsurePhoneV159()) return;
+  var date=rsvpDateV159(), map=rsvpGetV159(currentSelId,date), none=rsvpPlayersV159().filter(function(p){return !map[p.id];}).map(function(p){return p.name;});
+  if(!none.length){ toast('Svi su odgovorili.'); return; }
+  var L=rsvpLinksV159(date), dl=rsvpDateLabelV159(date);
+  rsvpShareTextV159('📣 *PODSJETNIK – trening '+dl.long+'*\n\nJoš nismo čuli od: '+none.join(', ')+'.\n\n✅ Dolazim:\n'+L.yes+'\n\n❌ Ne dolazim:\n'+L.no+'\n\n🔵⚪ *'+brandName()+'*');
+}
+function rsvpShareListV159(){
+  var date=rsvpDateV159(), map=rsvpGetV159(currentSelId,date), pl=rsvpPlayersV159();
+  var sel=(DB.selections||[]).find(function(x){return String(x.id)===String(currentSelId);});
+  var y=pl.filter(function(p){return map[p.id]==='yes';}), n=pl.filter(function(p){return map[p.id]==='no';});
+  var lines=['⚽ *DOLAZAK NA TRENING*','','👥 '+(sel?sel.name:'')+' · 📅 '+rsvpDateLabelV159(date).long,'','✅ *Dolaze ('+y.length+')*'];
+  y.forEach(function(p,i){lines.push((i+1)+'. '+p.name);});
+  if(n.length){ lines.push('','❌ *Ne dolaze ('+n.length+')*'); n.forEach(function(p){lines.push('• '+p.name);}); }
+  lines.push('','🔵⚪ *'+brandName()+'*');
+  rsvpShareTextV159(lines.join('\n'));
+}
+function rsvpApplyV159(){
+  var date=rsvpDateV159(), map=rsvpGetV159(currentSelId,date);
+  if(!Object.keys(map).length){ toast('Nema odgovora.','error'); return; }
+  askConfirm('Upiši u evidenciju?','Dolazi → prisutan, ne dolazi → odsutan. Nakon treninga možeš sve ispraviti.',function(){
+    var log=ensurePresenceLog(currentSelId,date);
+    if(!log){ toast('Za taj datum je trening obrisan.','error'); return; }
+    if(!log.records) log.records={};
+    Object.keys(map).forEach(function(pid){
+      var cur=log.records[pid], st=map[pid]==='yes'?'present':'absent';
+      log.records[pid]=(cur&&typeof cur==='object')?Object.assign({},cur,{state:st}):{state:st,rating:null};
+    });
+    save();
+    try{ loadPresLogForEdit(date); }catch(e){}
+    toast('Upisano u evidenciju.','success');
+  },'Upiši','rgba(34,197,94,.25)');
+}
+(function(){
+  var t=null;
+  document.addEventListener('click',function(){ clearTimeout(t); t=setTimeout(function(){ try{ if(document.getElementById('rsvpSummaryV159')&&currentSelId) rsvpRenderSummaryV159(); }catch(e){} },200); },true);
+})();
+
 // ════════════ v152: naziv i grb kluba (po mobitelu) ════════════
 var BRAND_KEY_V152='nksloga_v2_brand';
 var BRAND_DEFAULT_NAME_V152='TRENER EVIDENCIJA';
@@ -15817,6 +16041,7 @@ function openBrandV152(){
   _brandDraftCrestV152=null;
   var m=document.getElementById('brandModalV152'); if(!m) return;
   document.getElementById('brandNameInV152').value=brandGetV152().name||'';
+  var ph=document.getElementById('brandPhoneInV152'); if(ph) ph.value=brandGetV152().phone||'';
   document.getElementById('brandPreviewV152').src=brandCrest();
   m.style.display='flex';
 }
@@ -15842,6 +16067,7 @@ function brandClearCrestV152(){ _brandDraftCrestV152=''; document.getElementById
 function saveBrandV152(){
   var o=brandGetV152();
   o.name=String(document.getElementById('brandNameInV152').value||'').trim();
+  var phEl=document.getElementById('brandPhoneInV152'); if(phEl) o.phone=String(phEl.value||'').trim();
   if(_brandDraftCrestV152!==null){ if(_brandDraftCrestV152) o.crest=_brandDraftCrestV152; else delete o.crest; }
   brandSetV152(o); applyBrandV152(); closeBrandV152(); haptic('success'); toast('Spremljeno.');
 }
@@ -15855,7 +16081,8 @@ function buildBackupObjV151(){
     matches: DB.matches || [], plans: DB.plans, schedule: DB.schedule || [],
     users: (typeof AUTH!=='undefined' && AUTH.users) ? AUTH.users : [],
     playerTests: DB.playerTests || [],
-    brand: brandGetV152()
+    brand: brandGetV152(),
+    rsvp: rsvpAllV159()
   };
 }
 
@@ -16091,6 +16318,7 @@ function importJSON(input) {
           DB.plans       = data.plans       || [];
           if (data.schedule) DB.schedule = data.schedule;
           if (data.playerTests) DB.playerTests = data.playerTests;
+          if (data.rsvp && typeof data.rsvp==='object') { try{ localStorage.setItem(RSVP_KEY_V159,JSON.stringify(data.rsvp)); }catch(e){} }
           if (data.brand && typeof data.brand==='object' && (data.brand.name||data.brand.crest)) { brandSetV152(data.brand); applyBrandV152(); }
           if (data.users && data.users.length && typeof AUTH!=='undefined') { AUTH.users = data.users; try{ saveUsers(); }catch(e){} }
           save();
