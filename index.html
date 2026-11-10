@@ -44,7 +44,7 @@
 <!-- SheetJS za Excel uvoz -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
 <script>
-window.addEventListener('beforeinstallprompt',function(e){e.preventDefault();window._installEvtV145=e;});
+window.addEventListener('beforeinstallprompt',function(e){e.preventDefault();window._installEvtV145=e;try{if(typeof showInstallCardV145==='function')showInstallCardV145();}catch(x){}});
 window.addEventListener('appinstalled',function(){window._installEvtV145=null;try{var c=document.getElementById('installCardV145');if(c)c.style.display='none';}catch(x){}});
 </script>
 <!-- v144: LOKALNI NAČIN — true = sve ostaje samo na uređaju, bez servera. Za povratak na online/sync postavi false. -->
@@ -1052,6 +1052,7 @@ body{font-family:DM Sans,sans-serif;background:var(--navy);color:var(--text);
         <span style="font-size:12px;color:var(--text2);">Nemaš pristup? </span>
         <button onclick="showRegisterForm()" style="background:none;border:none;color:var(--accent);font-size:12px;cursor:pointer;text-decoration:underline;">Zatraži pristup</button>
       </div>
+      <button id="installLoginBtnV148" type="button" onclick="installAppV145()" style="display:none;width:100%;margin-top:16px;background:rgba(26,86,219,.15);border:1px solid rgba(96,165,250,.35);border-radius:10px;padding:11px;color:#93c5fd;font-size:13px;font-weight:700;cursor:pointer;">📲 Instaliraj aplikaciju na mobitel</button>
       <div style="text-align:center;margin-top:10px;">
         <button onclick="emergencyReset()" style="background:none;border:none;color:#ef4444;font-size:11px;cursor:pointer;opacity:0.6;">🔑 Reset admin pristupa</button>
       </div>
@@ -15568,10 +15569,13 @@ function showInstallCardV145(){
   var c=document.getElementById('installCardV145'); if(!c) return;
   var ua=navigator.userAgent||'';
   var mobile=/Android|iPhone|iPad|iPod/i.test(ua);
-  var hide = isStandaloneV145() || localStorage.getItem('nksloga_install_card_dismissed') ||
-             (mobile && !localStorage.getItem('nksloga_install_dismissed'));
+  var hide = isStandaloneV145() || localStorage.getItem('nksloga_install_card_dismissed');
   c.style.display = hide ? 'none' : 'flex';
+  var lb=document.getElementById('installLoginBtnV148');
+  if(lb) lb.style.display = isStandaloneV145() ? 'none' : 'block';
 }
+
+window.addEventListener('load',function(){ try{ showInstallCardV145(); }catch(e){} });
 
 function installHelpV145(text){
   var m=document.getElementById('installHelpV145');
