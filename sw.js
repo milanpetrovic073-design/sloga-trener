@@ -1,5 +1,5 @@
-// NK SLOGA Trener — service worker v144 (offline-first)
-const CACHE = 'nksloga-offline-v144';
+// NK SLOGA Trener — service worker v149 (offline-first)
+const CACHE = 'nksloga-offline-v149';
 const SHELL = ['./', './index.html', './manifest.json', './icon-192.png', './icon-512.png', './sloga-grb.jpg'];
 const CDN = [
   'https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js',
@@ -33,7 +33,7 @@ self.addEventListener('fetch', e => {
     e.respondWith((async () => {
       const c = await caches.open(CACHE);
       try {
-        const fresh = await fetch(req);
+        const fresh = await fetch(req, {cache: 'no-store'});
         if (fresh && fresh.ok) c.put('./index.html', fresh.clone());
         return fresh;
       } catch (err) {
