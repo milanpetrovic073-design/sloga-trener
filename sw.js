@@ -1,7 +1,8 @@
 // NK SLOGA Trener — service worker v149 (offline-first)
-const CACHE = 'nksloga-offline-v152';
+const CACHE = 'nksloga-offline-v153';
 const SHELL = ['./', './index.html', './manifest.json', './icon-192.png', './icon-512.png', './sloga-grb.jpg'];
 const CDN = [
+  './xlsx.full.min.js',
   'https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js',
   'https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap'
 ];

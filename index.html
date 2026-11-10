@@ -42,7 +42,7 @@
 <meta http-equiv="Expires" content="0">
 <meta http-equiv="Content-Security-Policy" content="default-src * 'self' data: blob: 'unsafe-inline' 'unsafe-eval'; script-src * 'self' 'unsafe-inline' 'unsafe-eval'; connect-src * 'self' data: blob: https: wss:; img-src * 'self' data: blob: https:; style-src * 'self' 'unsafe-inline' https:; font-src * 'self' data: https:;">
 <!-- SheetJS za Excel uvoz -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+<script src="./xlsx.full.min.js" onerror="var x=document.createElement('script');x.src='https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js';document.head.appendChild(x);"></script>
 <script>
 window.addEventListener('beforeinstallprompt',function(e){e.preventDefault();window._installEvtV145=e;try{if(typeof showInstallCardV145==='function')showInstallCardV145();}catch(x){}});
 window.addEventListener('appinstalled',function(){window._installEvtV145=null;try{var c=document.getElementById('installCardV145');if(c)c.style.display='none';}catch(x){}});
@@ -1031,7 +1031,7 @@ body{font-family:DM Sans,sans-serif;background:var(--navy);color:var(--text);
       <div class="login-logo-badge"><img src="data:image/jpeg;base64,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" style="width:100%;height:100%;object-fit:cover;" alt="NS"></div>
       <div class="login-title brand-name-v152">TRENER EVIDENCIJA</div>
       <div class="login-sub">Trener aplikacija</div>
-      <div style="font-size:10px;color:#64748b;margin-top:3px;">verzija 152 · lokalni način</div>
+      <div style="font-size:10px;color:#64748b;margin-top:3px;">verzija 153 · lokalni način</div>
     </div>
 
     <!-- Korak 1: Login forma -->
@@ -16870,8 +16870,8 @@ function openImportPlayers() {
       '</div>' +
 
       '<div style="margin-bottom:14px;">' +
-        '<label style="font-size:11px;color:#94a3b8;display:block;margin-bottom:4px;">ILI UČITAJ CSV DATOTEKU</label>' +
-        '<input type="file" id="importPlayersFile" accept=".csv,.txt,.xlsx" style="color:#e8edf5;font-size:13px;" onchange="readImportFile(this)">' +
+        '<label style="font-size:11px;color:#94a3b8;display:block;margin-bottom:4px;">ILI UČITAJ EXCEL / CSV DATOTEKU</label>' +
+        '<input type="file" id="importPlayersFile" accept=".csv,.txt,.xls,.xlsx,text/csv,text/plain,application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" style="color:#e8edf5;font-size:13px;" onchange="readImportFile(this)">' +
       '</div>' +
 
       '<div id="importPlayersPreview" style="margin-bottom:14px;"></div>' +
@@ -16886,80 +16886,116 @@ function openImportPlayers() {
   document.body.appendChild(div);
 }
 
+function importNormV152(x){
+  return String(x==null?'':x).normalize('NFD').replace(/[̀-ͯ]/g,'').replace(/đ/g,'d').replace(/Đ/g,'d').toLowerCase().replace(/[^a-z0-9# ]+/g,' ').replace(/\s+/g,' ').trim();
+}
+function importDateV152(v){
+  if (v==null || v==='') return '';
+  var pad=function(n){return String(n).padStart(2,'0');};
+  if (Object.prototype.toString.call(v)==='[object Date]' && !isNaN(v)) return v.getFullYear()+'-'+pad(v.getMonth()+1)+'-'+pad(v.getDate());
+  if (typeof v==='number' && v>1000 && v<80000){ // Excel serijski broj
+    var d=new Date(Date.UTC(1899,11,30)+Math.round(v)*86400000);
+    return d.getUTCFullYear()+'-'+pad(d.getUTCMonth()+1)+'-'+pad(d.getUTCDate());
+  }
+  var t=String(v).trim(), m;
+  if ((m=t.match(/^(\d{4})-(\d{1,2})-(\d{1,2})/))) return m[1]+'-'+pad(m[2])+'-'+pad(m[3]);
+  if ((m=t.match(/^(\d{1,2})\s*[.\/-]\s*(\d{1,2})\s*[.\/-]\s*(\d{4})/))) return m[3]+'-'+pad(m[2])+'-'+pad(m[1]);
+  return '';
+}
+
 function readImportFile(input) {
   var file = input.files[0];
   if (!file) return;
   var name = file.name.toLowerCase();
 
-  if (name.endsWith('.xls') || name.endsWith('.xlsx')) {
-    // Excel fajl — šalji na backend za parsiranje
+  if (name.endsWith('.xls') || name.endsWith('.xlsx') || name.endsWith('.xlsm')) {
+    if (typeof XLSX === 'undefined') {
+      toast('Excel biblioteka nije učitana. Otvori aplikaciju s internetom, pa pokušaj ponovno.', 'error');
+      return;
+    }
     var reader = new FileReader();
     reader.onload = function(e) {
-      var data = e.target.result;
-      // Pokušaj parsirati Excel pomoću SheetJS ako dostupan
-      if (typeof XLSX !== 'undefined') {
-        try {
-          var wb = XLSX.read(data, { type: 'binary' });
-          var ws = wb.Sheets[wb.SheetNames[0]];
-          var rows = XLSX.utils.sheet_to_json(ws, { header: 1, defval: '' });
-          processExcelRows(rows);
-          return;
-        } catch(e2) {}
+      try {
+        var wb = XLSX.read(new Uint8Array(e.target.result), { type: 'array' });
+        var rows = [];
+        for (var i = 0; i < wb.SheetNames.length && rows.length < 2; i++) {
+          rows = XLSX.utils.sheet_to_json(wb.Sheets[wb.SheetNames[i]], { header: 1, defval: '', raw: true });
+        }
+        processExcelRows(rows);
+      } catch (err) {
+        toast('Excel se ne može pročitati: ' + (err && err.message ? err.message : err), 'error');
       }
-      toast('Za Excel fajlove koristi CSV export ili kopiraj iz Excela i zalijepi.', 'error');
     };
-    reader.readAsBinaryString(file);
+    reader.onerror = function(){ toast('Datoteka se ne može učitati.', 'error'); };
+    reader.readAsArrayBuffer(file);
   } else {
-    // CSV / TXT
+    // CSV / TXT (zarez, točka-zarez ili tab)
     var reader2 = new FileReader();
     reader2.onload = function(e) {
-      document.getElementById('importPlayersText').value = e.target.result;
+      var text = String(e.target.result || '').replace(/^﻿/, '');
+      var lines = text.split(/\r?\n/).filter(function(l){ return l.trim(); });
+      var first = lines[0] || '';
+      var delim = first.indexOf('\t') >= 0 ? '\t' : ((first.split(';').length > first.split(',').length) ? ';' : ',');
+      var rows = lines.map(function(l){ return l.split(delim).map(function(c){ return c.trim().replace(/^"|"$/g, ''); }); });
+      var hdr = rows.length ? rows[0].map(importNormV152) : [];
+      var hasHeader = hdr.some(function(h){ return h === 'ime' || h === 'prezime' || h === 'name' || h.indexOf('ime i prezime') === 0; });
+      if (hasHeader) { processExcelRows(rows); return; }
+      document.getElementById('importPlayersText').value = delim === ',' || delim === '\t' ? text : rows.map(function(r){ return r.join(','); }).join('\n');
       previewImportPlayers();
     };
     reader2.readAsText(file, 'UTF-8');
   }
+  input.value = '';
 }
 
 function processExcelRows(rows) {
-  if (!rows || rows.length < 2) { toast('Excel je prazan!', 'error'); return; }
+  if (!rows || rows.length < 2) { toast('Datoteka je prazna!', 'error'); return; }
 
-  // Detektiraj zaglavlje — tražimo stupac s imenom
-  var header = rows[0].map(function(h){ return String(h).toLowerCase().trim(); });
-  var nameIdx = -1, dobIdx = -1, posIdx = -1;
-
-  // HNS format: ID, Ime, Spol, Datum rođ., Državljanstvo, Pozicija...
-  header.forEach(function(h, i) {
-    if (h === 'ime' || h === 'ime i prezime' || h === 'name') nameIdx = i;
-    if (h.indexOf('datum') >= 0 || h.indexOf('ro') >= 0 || h === 'dob') dobIdx = i;
-    if (h === 'pozicija' || h === 'position' || h === 'pos') posIdx = i;
-  });
-
-  // Fallback — ako nema zaglavlja, pretpostavi kolone
-  if (nameIdx < 0) nameIdx = 1; // HNS: kolona 1 = Ime
-  if (dobIdx < 0) dobIdx = 3;   // HNS: kolona 3 = Datum rođ.
-  if (posIdx < 0) posIdx = 5;   // HNS: kolona 5 = Pozicija
-
-  var lines = [];
-  for (var i = 1; i < rows.length; i++) {
-    var row = rows[i];
-    var name = String(row[nameIdx] || '').trim();
-    var dob  = String(row[dobIdx]  || '').trim();
-    var pos  = String(row[posIdx]  || '').trim();
-    if (!name || name.length < 2) continue;
-
-    // Normaliziraj datum DD.MM.GGGG → GGGG-MM-DD
-    if (dob && dob.indexOf('.') >= 0) {
-      var dp = dob.split('.');
-      if (dp.length === 3) {
-        dob = dp[2].trim() + '-' + dp[1].trim().padStart(2,'0') + '-' + dp[0].trim().padStart(2,'0');
-      }
-    }
-    lines.push(name + ', ' + (pos || 'Vezni') + ', , ' + dob);
+  // Pronađi redak sa zaglavljem (COMET izvozi često imaju naslovne retke iznad)
+  var hRow = -1, scan = Math.min(rows.length, 25);
+  for (var r = 0; r < scan; r++) {
+    var hs = (rows[r] || []).map(importNormV152);
+    if (hs.some(function(h){ return h === 'ime' || h === 'prezime' || h === 'name' || h === 'igrac' || h.indexOf('ime i prezime') === 0 || h === 'first name' || h === 'last name'; })) { hRow = r; break; }
   }
 
+  var firstIdx = -1, lastIdx = -1, fullIdx = -1, dobIdx = -1, posIdx = -1, numIdx = -1;
+  if (hRow >= 0) {
+    (rows[hRow] || []).map(importNormV152).forEach(function(h, i) {
+      if (!h) return;
+      if (h === 'ime' || h === 'first name' || h === 'firstname') firstIdx = i;
+      else if (h === 'prezime' || h === 'last name' || h === 'lastname' || h === 'surname') lastIdx = i;
+      else if (h.indexOf('ime i prezime') === 0 || h.indexOf('prezime i ime') === 0 || h === 'name' || h === 'igrac' || h === 'player' || h === 'naziv') fullIdx = i;
+      else if (h.indexOf('rodenja') >= 0 || h.indexOf('rodjenja') >= 0 || h.indexOf('birth') >= 0 || h === 'dob' || h.indexOf('datum rod') === 0 || h.indexOf('dat rod') === 0) { if (dobIdx < 0) dobIdx = i; }
+      else if (h === 'pozicija' || h === 'position' || h === 'pos' || h.indexOf('pozicij') === 0) posIdx = i;
+      else if (h === 'broj' || h === 'br' || h === 'dres' || h.indexOf('broj dresa') === 0 || h === 'number' || h === '#') numIdx = i;
+    });
+    if (dobIdx < 0) { // fallback: bilo koji stupac s "datum"
+      (rows[hRow] || []).map(importNormV152).forEach(function(h, i){ if (dobIdx < 0 && h.indexOf('datum') >= 0) dobIdx = i; });
+    }
+    if (fullIdx < 0 && firstIdx < 0 && lastIdx < 0) {
+      toast('Nisam našao stupac s imenom. Stupci: ' + (rows[hRow]||[]).join(', ').slice(0, 120), 'error'); return;
+    }
+  } else {
+    // Bez zaglavlja: HNS raspored stupaca
+    hRow = 0; fullIdx = 1; dobIdx = 3; posIdx = 5;
+  }
+
+  var lines = [];
+  for (var i = hRow + 1; i < rows.length; i++) {
+    var row = rows[i] || [];
+    var name = fullIdx >= 0 ? String(row[fullIdx] == null ? '' : row[fullIdx]).trim()
+      : (String(firstIdx >= 0 && row[firstIdx] != null ? row[firstIdx] : '').trim() + ' ' + String(lastIdx >= 0 && row[lastIdx] != null ? row[lastIdx] : '').trim()).trim();
+    if (!name || name.length < 2) continue;
+    var dob = dobIdx >= 0 ? importDateV152(row[dobIdx]) : '';
+    var pos = posIdx >= 0 ? String(row[posIdx] == null ? '' : row[posIdx]).trim() : '';
+    var num = numIdx >= 0 ? parseInt(row[numIdx], 10) : NaN;
+    lines.push(name + ', ' + (pos || 'Vezni') + ', ' + (isNaN(num) ? '' : num) + ', ' + dob);
+  }
+
+  if (!lines.length) { toast('Nisam našao nijednog igrača u datoteci.', 'error'); return; }
   document.getElementById('importPlayersText').value = lines.join('\n');
   previewImportPlayers();
-  toast('Excel učitan — ' + lines.length + ' igrača pronađeno.', 'success');
+  toast('Učitano ' + lines.length + ' igrača.', 'success');
 }
 
 function parseImportLine(line) {
@@ -16969,6 +17005,8 @@ function parseImportLine(line) {
   var parts;
   if (line.indexOf('\t') >= 0) {
     parts = line.split('\t');
+  } else if (line.indexOf(';') >= 0 && line.indexOf(',') < 0) {
+    parts = line.split(';');
   } else {
     parts = line.split(',');
   }
