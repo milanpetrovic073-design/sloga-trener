@@ -1042,7 +1042,7 @@ body{font-family:DM Sans,sans-serif;background:var(--navy);color:var(--text);
           <button type="button" onclick="loginNameSaveV164()" style="background:#0757aa;color:#fff;border:0;border-radius:8px;padding:9px 12px;font-weight:700;font-size:13px;">Spremi</button>
         </div>
       </div>
-      <div style="font-size:10px;color:#64748b;margin-top:3px;">verzija 165 · lokalni način</div>
+      <div style="font-size:10px;color:#64748b;margin-top:3px;">verzija 166 · lokalni način</div>
     </div>
 
     <!-- Korak 1: Login forma -->
@@ -16214,7 +16214,7 @@ function rsvpDeleteInviteV160(){
 
 
 // ════════════ v162: obavijest o novoj verziji ════════════
-var APP_VERSION_V162 = 165;
+var APP_VERSION_V162 = 166;
 (function(){
   var shown=false, last=0;
   window.showNewVersionV162=function(){
@@ -16358,7 +16358,7 @@ function playerReportPageV165(playerId){
   }catch(err){}
   var ms=(DB.matches||[]).filter(function(m){ return String(m.selId)===String(p.selId)||(m.guestIds&&m.guestIds.some(function(i){return String(i)===String(playerId);})); })
     .filter(function(m){ var x=getMatchPlayerStats(m,playerId); return x||effectiveMatchRating(m,playerId)>0; })
-    .sort(function(a,b){return String(b.date||'').localeCompare(String(a.date||''));}).slice(0,6);
+    .sort(function(a,b){return String(b.date||'').localeCompare(String(a.date||''));}).slice(0,30);
   var mrows=ms.map(function(m){
     var x=getMatchPlayerStats(m,playerId)||{}; var d=m.date?new Date(m.date+'T12:00:00').toLocaleDateString('hr-HR'):'';
     var sc=0; try{ var sm=canonicalScorerGoals(m); sc=parseInt(sm[playerId]||sm[String(playerId)],10)||0; }catch(err){}
@@ -16369,15 +16369,35 @@ function playerReportPageV165(playerId){
     .sort(function(a,b){return String(b.date||'').localeCompare(String(a.date||''));}).slice(0,5).map(function(m){
       var q=m.playerCoachNotes||{}; var d=m.date?new Date(m.date+'T12:00:00').toLocaleDateString('hr-HR'):'';
       return '<div class="note"><b>'+d+' · '+e((m.home||'')+' – '+(m.away||''))+'</b><br>'+e(q[playerId]||q[String(playerId)]).replace(/\n/g,'<br>')+'</div>'; }).join('');
+  var SL={present:'Prisutan',late:'Kasni',absent:'Izostao',injury:'Ozljeda/bolest',pending:'Nije označeno',excused:'Opravdano'};
+  var logs=(DB.presenceLog||[]).filter(function(l){
+    var r=l.records||{};
+    return Object.prototype.hasOwnProperty.call(r,p.id)||Object.prototype.hasOwnProperty.call(r,String(p.id))||(l.guestIds&&l.guestIds.some(function(i){return String(i)===String(playerId);}));
+  }).sort(function(a,b){return String(b.date||'').localeCompare(String(a.date||''));});
+  var cnt={present:0,late:0,absent:0,injury:0,other:0};
+  var trows=logs.map(function(l){
+    var rec=(l.records||{})[p.id]; if(rec===undefined) rec=(l.records||{})[String(p.id)];
+    var stt=recState(rec)||'pending', guest=String(l.selId)!==String(p.selId);
+    if(cnt[stt]!==undefined) cnt[stt]++; else cnt.other++;
+    var rt=null; try{rt=recRating(rec);}catch(er){}
+    var plan=null; try{ plan=(l.planId?(DB.plans||[]).find(function(x){return String(x.id)===String(l.planId);}):null)||l.planSnapshot||null; }catch(er){}
+    var theme=(l.theme||'')+(plan&&(plan.name||plan.title)?(l.theme?' · ':'')+(plan.name||plan.title):'');
+    var rs=(rec&&typeof rec==='object'&&(rec.reason||rec.confirmReason))?(rec.reason||rec.confirmReason):'';
+    return '<tr><td>'+(l.date?new Date(l.date+'T12:00:00').toLocaleDateString('hr-HR'):'')+'</td><td>'+e(SL[stt]||stt)+(guest?' (gost)':'')+'</td><td>'+(rt?rt:'–')+'</td><td>'+e((theme+(rs?(theme?' · ':'')+rs:'')).slice(0,90))+'</td></tr>';
+  }).join('');
+  var tsum='<div class="tiles" style="grid-template-columns:repeat(5,1fr)"><div class="tile"><div class="tv">'+logs.length+'</div><div class="tl">Treninga</div></div><div class="tile"><div class="tv">'+cnt.present+'</div><div class="tl">Prisutan</div></div><div class="tile"><div class="tv">'+cnt.late+'</div><div class="tl">Kasni</div></div><div class="tile"><div class="tv">'+cnt.absent+'</div><div class="tl">Izostao</div></div><div class="tile"><div class="tv">'+cnt.injury+'</div><div class="tl">Ozljeda</div></div></div>';
+  var tsec=logs.length?('<h3>Treninzi – pregled</h3>'+tsum+'<table style="margin-top:8px"><thead><tr><th>Datum</th><th>Status</th><th>Ocjena</th><th>Tema / napomena</th></tr></thead><tbody>'+trows+'</tbody></table>'):'';
   var crest=brandCrest();
   return '<section class="page">'+
     '<div class="head"><img class="crest" src="'+e(crest)+'" alt=""><div><div class="club">'+e(brandName())+'</div><div class="ttl">Izvještaj igrača</div></div></div>'+
     '<div class="pl"><div class="pn">'+e(p.name)+'</div><div class="pm">'+e((sel?sel.name:'')+(p.pos?' · '+p.pos:'')+(p.pos2?' / '+p.pos2:'')+(p.number?' · #'+p.number:'')+(age?' · '+age+' god.':''))+'</div>'+
+    '<div class="pm2">Status: '+e((function(){try{return playerAvailabilityMeta(p).label;}catch(er){return 'Aktivan';}})())+(p.hnsId?' · HNS ID '+e(String(p.hnsId)):'')+(p.note?' · '+e(p.note):'')+'</div>'+
     '<div class="pm2">Jača noga: '+e(foot)+(p.heightCm?' · '+p.heightCm+' cm':'')+(p.weightKg?' · '+p.weightKg+' kg':'')+(p.dob?' · rođen '+e(p.dob.split('-').reverse().join('.')):'')+'</div></div>'+
     '<h3>Sezona u brojkama</h3><div class="tiles">'+tilesH+'</div>'+
     (cats?'<h3>Prosječne ocjene po kategorijama (1–5)</h3><div class="cats">'+cats+'</div>':'')+
     (tests?'<h3>Testiranja (zadnje / najbolje)</h3><table><thead><tr><th>Test</th><th>Zadnje</th><th>Najbolje</th></tr></thead><tbody>'+tests+'</tbody></table>':'')+
-    (mrows?'<h3>Zadnje utakmice</h3><table><thead><tr><th>Datum</th><th>Utakmica</th><th>Min</th><th>Gol</th><th>Ast</th><th>Ocjena</th></tr></thead><tbody>'+mrows+'</tbody></table>':'')+
+    tsec+
+    (mrows?'<h3>Utakmice</h3><table><thead><tr><th>Datum</th><th>Utakmica</th><th>Min</th><th>Gol</th><th>Ast</th><th>Ocjena</th></tr></thead><tbody>'+mrows+'</tbody></table>':'')+
     (notes?'<h3>Bilješke trenera</h3>'+notes:'')+
     '<div class="foot">'+e(brandName())+' · izvještaj generiran '+new Date().toLocaleDateString('hr-HR')+'</div></section>';
 }
