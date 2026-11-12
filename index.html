@@ -1042,7 +1042,7 @@ body{font-family:DM Sans,sans-serif;background:var(--navy);color:var(--text);
           <button type="button" onclick="loginNameSaveV164()" style="background:#0757aa;color:#fff;border:0;border-radius:8px;padding:9px 12px;font-weight:700;font-size:13px;">Spremi</button>
         </div>
       </div>
-      <div style="font-size:10px;color:#64748b;margin-top:3px;">verzija 166 · lokalni način</div>
+      <div style="font-size:10px;color:#64748b;margin-top:3px;">verzija 167 · lokalni način</div>
     </div>
 
     <!-- Korak 1: Login forma -->
@@ -5452,7 +5452,7 @@ function syncResultQuickScorersField(m) {
 function renderResultScorerQuickList(m) {
   var list = document.getElementById('mre-scorerQuickList');
   if (!list || !m) return;
-  var players = playersForSel(m.selId).slice().sort(function(a,b){ return (a.name||'').localeCompare(b.name||'', 'hr'); });
+  var players = playersForSelWithGuests(m.selId, m.guestIds || []).slice().sort(function(a,b){ return (String(a.selId)===String(m.selId)?0:1)-(String(b.selId)===String(m.selId)?0:1) || (a.name||'').localeCompare(b.name||'', 'hr'); });
   if (!players.length) {
     list.innerHTML = '<div style="padding:12px;color:var(--text3);font-size:12px;">Nema igrača u ovoj selekciji.</div>';
     return;
@@ -5460,7 +5460,7 @@ function renderResultScorerQuickList(m) {
   list.innerHTML = players.map(function(p){
     var goals = parseInt(matchResultQuickScorers[p.id]) || 0;
     return '<div style="display:flex;align-items:center;gap:8px;padding:8px 10px;border-bottom:1px solid var(--border);">' +
-      '<div style="flex:1;min-width:0;font-size:13px;font-weight:600;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">'+escHtml(p.name)+'</div>' +
+      '<div style="flex:1;min-width:0;font-size:13px;font-weight:600;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">'+escHtml(p.name)+(String(p.selId)!==String(m.selId)?' <span style="font-size:10px;color:#fbbf24;font-weight:400;">(gost)</span>':'')+'</div>' +
       '<button type="button" onclick="resultScorerMinus('+p.id+')" '+(goals?'':'disabled')+' style="width:32px;height:32px;border-radius:8px;border:1px solid var(--border2);background:var(--card2);color:'+(goals?'#fca5a5':'var(--text3)')+';font-size:18px;font-weight:700;cursor:'+(goals?'pointer':'default')+';opacity:'+(goals?'1':'.45')+';">−</button>' +
       '<div style="min-width:34px;text-align:center;font-family:DM Mono,monospace;font-size:15px;font-weight:800;color:'+(goals?'#fbbf24':'var(--text3)')+';">⚽ '+goals+'</div>' +
       '<button type="button" onclick="resultScorerPlus('+p.id+')" style="width:36px;height:32px;border-radius:8px;border:1px solid rgba(251,191,36,.45);background:rgba(251,191,36,.15);color:#fbbf24;font-size:18px;font-weight:800;cursor:pointer;">＋</button>' +
@@ -16214,7 +16214,7 @@ function rsvpDeleteInviteV160(){
 
 
 // ════════════ v162: obavijest o novoj verziji ════════════
-var APP_VERSION_V162 = 166;
+var APP_VERSION_V162 = 167;
 (function(){
   var shown=false, last=0;
   window.showNewVersionV162=function(){
