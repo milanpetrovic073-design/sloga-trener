@@ -1042,7 +1042,7 @@ body{font-family:DM Sans,sans-serif;background:var(--navy);color:var(--text);
           <button type="button" onclick="loginNameSaveV164()" style="background:#0757aa;color:#fff;border:0;border-radius:8px;padding:9px 12px;font-weight:700;font-size:13px;">Spremi</button>
         </div>
       </div>
-      <div style="font-size:10px;color:#64748b;margin-top:3px;">verzija 164 · lokalni način</div>
+      <div style="font-size:10px;color:#64748b;margin-top:3px;">verzija 165 · lokalni način</div>
     </div>
 
     <!-- Korak 1: Login forma -->
@@ -2922,6 +2922,7 @@ body{font-family:DM Sans,sans-serif;background:var(--navy);color:var(--text);
       <button class="btn btn-ghost" style="flex:1;" onclick="document.getElementById('attStatsModalV163').style.display='none'">Zatvori</button>
       <button class="btn btn-primary" style="flex:1;" onclick="shareAttStatsV163()">📤 Podijeli</button>
     </div>
+    <button class="btn btn-ghost btn-full" style="margin-top:8px;" onclick="printSelectionReportsV165(document.getElementById('attSelV163').value)">🖨 Ispis izvještaja svih igrača selekcije</button>
   </div>
 </div>
 <div id="accountModalV154" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.75);z-index:700;align-items:center;justify-content:center;padding:16px;">
@@ -16213,7 +16214,7 @@ function rsvpDeleteInviteV160(){
 
 
 // ════════════ v162: obavijest o novoj verziji ════════════
-var APP_VERSION_V162 = 164;
+var APP_VERSION_V162 = 165;
 (function(){
   var shown=false, last=0;
   window.showNewVersionV162=function(){
@@ -16331,6 +16332,103 @@ function loginNameSaveV164(){
   brandSetV152(o); applyBrandV152(); loginNameEditV164(false);
   try{ toast(v?'Naziv spremljen.':'Vraćen zadani naziv.'); }catch(e){}
 }
+
+// ════════════ v165: ispis izvještaja igrača ════════════
+function playerReportPageV165(playerId){
+  var p=(DB.players||[]).find(function(x){return String(x.id)===String(playerId);}); if(!p) return '';
+  var sel=(DB.selections||[]).find(function(x){return String(x.id)===String(p.selId);});
+  var st=computePlayerStats(playerId)||{};
+  var age=p.dob?(new Date().getFullYear()-parseInt(p.dob.split('-')[0],10)):null;
+  var e=escHtml, n=function(v){return v==null||v===''?'–':v;};
+  var foot=(typeof dominantFootLabel==='function')?dominantFootLabel(p.dominantFoot):'–';
+  var tiles=[['Treninzi',st.present+'/'+st.trainingCount+' ('+(st.trainPct||0)+'%)'],['Utakmice',n(st.matchesPlayed)],['Početni sastav',n(st.starts)],['Minute',n(st.minutes)],
+    ['Golovi',n(st.goals)],['Asistencije',n(st.assists)],['Žuti / crveni',(st.yellowCards||0)+' / '+(st.redCards||0)],['Prosj. ocjena',st.avgRating!=null?st.avgRating:'–']];
+  var tilesH=tiles.map(function(t){return '<div class="tile"><div class="tv">'+e(String(t[1]))+'</div><div class="tl">'+t[0]+'</div></div>';}).join('');
+  var cats=(typeof RATING_CATEGORIES!=='undefined'?RATING_CATEGORIES:[]).filter(function(c){return st.categoryAvgs&&st.categoryAvgs[c.key];}).map(function(c){
+    var v=st.categoryAvgs[c.key]; return '<div class="cat"><div class="cl"><span>'+e(c.label)+'</span><b>'+v+'</b></div><div class="bar"><div style="width:'+Math.min(100,Math.round(v/5*100))+'%"></div></div></div>';
+  }).join('');
+  var tests='';
+  try{
+    var rows=testsForPlayer(playerId);
+    if(rows.length){
+      var ks=Object.keys(TEST_METRICS).filter(function(k){return latestTestValue(playerId,k)!==null;});
+      tests=ks.map(function(k){ var lm=latestMetricTestV104?latestMetricTestV104(playerId,k):null;
+        return '<tr><td>'+e(TEST_METRICS[k].label)+'</td><td>'+testFmt(k,lm?lm.value:latestTestValue(playerId,k))+' '+TEST_METRICS[k].unit+'</td><td>'+testFmt(k,bestTestValue(playerId,k))+' '+TEST_METRICS[k].unit+'</td></tr>'; }).join('');
+    }
+  }catch(err){}
+  var ms=(DB.matches||[]).filter(function(m){ return String(m.selId)===String(p.selId)||(m.guestIds&&m.guestIds.some(function(i){return String(i)===String(playerId);})); })
+    .filter(function(m){ var x=getMatchPlayerStats(m,playerId); return x||effectiveMatchRating(m,playerId)>0; })
+    .sort(function(a,b){return String(b.date||'').localeCompare(String(a.date||''));}).slice(0,6);
+  var mrows=ms.map(function(m){
+    var x=getMatchPlayerStats(m,playerId)||{}; var d=m.date?new Date(m.date+'T12:00:00').toLocaleDateString('hr-HR'):'';
+    var sc=0; try{ var sm=canonicalScorerGoals(m); sc=parseInt(sm[playerId]||sm[String(playerId)],10)||0; }catch(err){}
+    var r=effectiveMatchRating(m,playerId);
+    return '<tr><td>'+d+'</td><td>'+e((m.home||'')+' – '+(m.away||''))+'</td><td>'+n(x.minutes)+'</td><td>'+sc+'</td><td>'+(parseInt(x.assists)||0)+'</td><td>'+(r>0?r:'–')+'</td></tr>';
+  }).join('');
+  var notes=(DB.matches||[]).filter(function(m){ var q=m.playerCoachNotes||{}; return String(q[playerId]||q[String(playerId)]||'').trim()!==''; })
+    .sort(function(a,b){return String(b.date||'').localeCompare(String(a.date||''));}).slice(0,5).map(function(m){
+      var q=m.playerCoachNotes||{}; var d=m.date?new Date(m.date+'T12:00:00').toLocaleDateString('hr-HR'):'';
+      return '<div class="note"><b>'+d+' · '+e((m.home||'')+' – '+(m.away||''))+'</b><br>'+e(q[playerId]||q[String(playerId)]).replace(/\n/g,'<br>')+'</div>'; }).join('');
+  var crest=brandCrest();
+  return '<section class="page">'+
+    '<div class="head"><img class="crest" src="'+e(crest)+'" alt=""><div><div class="club">'+e(brandName())+'</div><div class="ttl">Izvještaj igrača</div></div></div>'+
+    '<div class="pl"><div class="pn">'+e(p.name)+'</div><div class="pm">'+e((sel?sel.name:'')+(p.pos?' · '+p.pos:'')+(p.pos2?' / '+p.pos2:'')+(p.number?' · #'+p.number:'')+(age?' · '+age+' god.':''))+'</div>'+
+    '<div class="pm2">Jača noga: '+e(foot)+(p.heightCm?' · '+p.heightCm+' cm':'')+(p.weightKg?' · '+p.weightKg+' kg':'')+(p.dob?' · rođen '+e(p.dob.split('-').reverse().join('.')):'')+'</div></div>'+
+    '<h3>Sezona u brojkama</h3><div class="tiles">'+tilesH+'</div>'+
+    (cats?'<h3>Prosječne ocjene po kategorijama (1–5)</h3><div class="cats">'+cats+'</div>':'')+
+    (tests?'<h3>Testiranja (zadnje / najbolje)</h3><table><thead><tr><th>Test</th><th>Zadnje</th><th>Najbolje</th></tr></thead><tbody>'+tests+'</tbody></table>':'')+
+    (mrows?'<h3>Zadnje utakmice</h3><table><thead><tr><th>Datum</th><th>Utakmica</th><th>Min</th><th>Gol</th><th>Ast</th><th>Ocjena</th></tr></thead><tbody>'+mrows+'</tbody></table>':'')+
+    (notes?'<h3>Bilješke trenera</h3>'+notes:'')+
+    '<div class="foot">'+e(brandName())+' · izvještaj generiran '+new Date().toLocaleDateString('hr-HR')+'</div></section>';
+}
+function playerReportHtmlV165(ids,title){
+  var pages=ids.map(playerReportPageV165).filter(Boolean).join('');
+  return '<!DOCTYPE html><html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>'+escHtml(title)+'</title><style>'+
+  '@page{size:A4;margin:12mm}*{box-sizing:border-box}body{font-family:Arial,sans-serif;color:#172033;margin:0;font-size:11px;background:#fff}'+
+  '.bar0{position:sticky;top:0;background:#0757aa;padding:8px;text-align:center}.bar0 button{padding:10px 16px;border:0;border-radius:8px;font-weight:700;font-size:14px}'+
+  '.page{page-break-after:always;padding:6px 4px}.page:last-child{page-break-after:auto}'+
+  '.head{display:flex;align-items:center;gap:12px;border-bottom:3px solid #1e3a5f;padding-bottom:10px}.crest{width:52px;height:52px;object-fit:contain}.club{font-size:12px;font-weight:800;color:#0757aa;letter-spacing:.06em;text-transform:uppercase}.ttl{font-size:20px;font-weight:900;color:#1e3a5f}'+
+  '.pl{margin:12px 0}.pn{font-size:22px;font-weight:900}.pm{font-size:12px;color:#334155;margin-top:3px}.pm2{font-size:11px;color:#64748b;margin-top:2px}'+
+  'h3{font-size:11px;text-transform:uppercase;letter-spacing:.06em;color:#1e3a5f;border-bottom:1px solid #cbd5e1;padding-bottom:3px;margin:14px 0 8px}'+
+  '.tiles{display:grid;grid-template-columns:repeat(4,1fr);gap:6px}.tile{border:1px solid #cbd5e1;border-radius:8px;padding:8px;text-align:center}.tv{font-size:15px;font-weight:900;color:#0757aa}.tl{font-size:9px;color:#64748b;margin-top:2px}'+
+  '.cats{display:grid;grid-template-columns:1fr 1fr;gap:6px 14px}.cl{display:flex;justify-content:space-between;font-size:11px}.bar{height:6px;background:#e2e8f0;border-radius:3px;overflow:hidden;margin-top:2px}.bar div{height:100%;background:#0757aa}'+
+  'table{width:100%;border-collapse:collapse;font-size:10.5px}th,td{border:1px solid #cbd5e1;padding:5px 6px;text-align:left}th{background:#eef2f7}'+
+  '.note{border-left:3px solid #0757aa;background:#f1f5f9;padding:6px 9px;margin-bottom:6px;font-size:10.5px}.foot{margin-top:14px;font-size:9px;color:#94a3b8;text-align:center}'+
+  '@media print{.bar0{display:none}}</style></head><body><div class="bar0"><button onclick="window.print()">🖨 Ispis / Spremi kao PDF</button></div>'+pages+'</body></html>';
+}
+function openPlayerReportV165(ids,title){
+  if(!ids||!ids.length){ toast('Nema igrača.','error'); return; }
+  var w=window.open('','_blank');
+  if(!w){ toast('Preglednik je blokirao prozor. Dopusti skočne prozore.','error'); return; }
+  w.document.open(); w.document.write(playerReportHtmlV165(ids,title)); w.document.close();
+}
+function printPlayerReportV165(playerId){
+  if(!canAccessPlayerById(playerId)) return denyPermission('Nemaš pristup ovom igraču.');
+  var p=(DB.players||[]).find(function(x){return String(x.id)===String(playerId);});
+  openPlayerReportV165([playerId],'Izvještaj - '+(p?p.name:''));
+}
+function printSelectionReportsV165(selId){
+  var sel=(DB.selections||[]).find(function(x){return String(x.id)===String(selId);});
+  var ids=playersForSel(selId).slice().sort(function(a,b){return String(a.name).localeCompare(String(b.name),'hr');}).map(function(p){return p.id;});
+  openPlayerReportV165(ids,'Izvještaji igrača - '+(sel?sel.name:''));
+}
+(function(){
+  var orig=window.openPlayerProfile;
+  window.openPlayerProfile=function(id){
+    var r=orig.apply(this,arguments);
+    try{
+      var h=document.getElementById('ppHeader');
+      if(h && !document.getElementById('ppPrintBtnV165')){
+        var b=document.createElement('button'); b.id='ppPrintBtnV165'; b.type='button'; b.className='btn btn-ghost btn-sm';
+        b.style.cssText='width:100%;margin-top:10px;'; b.textContent='🖨 Ispis izvještaja igrača';
+        b.onclick=function(){ printPlayerReportV165(window._currentProfilePlayerId); };
+        h.appendChild(b);
+      } else if(document.getElementById('ppPrintBtnV165')){ var o=document.getElementById('ppPrintBtnV165'); if(o.parentNode!==document.getElementById('ppHeader')) document.getElementById('ppHeader').appendChild(o); }
+    }catch(e){}
+    return r;
+  };
+})();
+
 // ════════════ v152: naziv i grb kluba (po mobitelu) ════════════
 var BRAND_KEY_V152='nksloga_v2_brand';
 var BRAND_DEFAULT_NAME_V152='TRENER EVIDENCIJA';
